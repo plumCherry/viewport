@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <style>
+        /*清除默认样式 start*/
+        html,body{height: 100%;overflow: hidden;}
+        html,body,h1,h2,h3,h4,h5,h6,p,ul,li{margin: 0;padding: 0;font: 14px "微软雅黑";}
+        a{text-decoration: none;display: block;}
+        li{list-style: none;}
+        img{display: block;}
+        /*清除默认样式 end*/
+
+        /*解决高度塌陷*/
+        .clearfix{
+            *zoom: 1
+        }
+        .clearfix::before{
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        /*公共样式*/
+        #list>li{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            float: left;
+            height: 100%;
+            /*    transform-origin: center top;*/
+        }
+
+        #wrap{
+            height: 100%;
+            position: relative;
+        }
+        /*刮刮卡*/
+        #test{
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: 1s opacity;
+            z-index: 30;
+        }
+
+        #list{
+            height: 100%;
+        }
+
+        /*第一张*/
+        #one{
+            background: url("./img/b.png") no-repeat;
+            background-size: 100% 100%;
+          /*  visibility: hidden;*/
+        }
+        #one .text{
+            position: absolute;
+            bottom: 10%;
+            left: 28%;
+            color: white;
+        }
+        #one .text>p{
+            font-size: 16px;
+            transition: .8s;
+        }
+        /*第二张*/
+        #two{
+            position: relative;
+            background: url("./img/c.png") no-repeat;
+            background-size: 100% 100%;
+            overflow: hidden;
+            visibility: hidden;
+        }
+
+        #two .spread>li{
+            position: absolute;
+            top: 55%;
+            left: 0;
+            right: 0;
+            width: 2.2rem;
+            height: 2.2rem;
+            margin: auto;
+            transition: 0.8s;
+        }
+
+        #two .spread li:nth-child(1){
+            background: url("img/c1.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        #two .spread li:nth-child(2){
+            background: url("img/c2.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        #two .spread li:nth-child(3){
+            background: url("img/c3.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        #two .spread li:nth-child(4){
+            background: url("img/c4.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        #two .spread li:nth-child(5){
+            background: url("img/c5.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        #two .spread li:nth-child(6){
+            background: url("img/c6.png") no-repeat;
+            background-size: 100% 100%;
+        }
+
+        /*第三张*/
+        #three{
+            position: relative;
+            background: url("./img/d.png") no-repeat;
+            background-size: 100% 100%;
+            overflow: hidden;
+            visibility: hidden;
+        }
+        #three .imgRotate{
+            position: absolute;
+            left: 2.2rem;
+            top: 60%;
+            width: 260px;
+            height: 140px;
+            background: url("img/d1.png") no-repeat;
+            background-size: 100% 100%;
+            transition: 0.8s;
+        }
+        /*第四张*/
+        #four{
+            position: relative;
+            background: url("./img/e.png") no-repeat;
+            background-size: 100% 100%;
+            visibility: hidden;
+        }
+        #four>div{
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 5px;
+            box-shadow: 0 0 6px;
+            transition: 0.8s linear all;
+            transform-origin:left top;
+            overflow: hidden;
+        }
+        #four div:nth-child(1){
+            left: 12px;
+            top: 100px;
+
+         }
+        #four div:nth-child(2){
+            right: 18px;
+            top: 120px;
+
+        }
+        #four div:nth-child(3){
+            right: 35px;
+            top: 50%;
+            margin-top: -80px;
+
+        }
+
+
+        /*第五张*/
+        #five{
+            background: url("./img/f.png") no-repeat;
+            background-size: 100% 100%;
+            visibility: hidden;
+        }
+
+        /*定义箭头*/
+        #arrow{
+            position: absolute;
+            z-index: 20;
+            width: 45px;
+            height: 26px;
+            bottom: 35px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background: url("img/arr.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        #arrow.showHide{
+            animation: 1.2s sH infinite;
+        }
+        @keyframes sH {
+            0%{
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            50%{
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100%{
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+        }
+
+        /*定义向上滑动*/
+        .moveToTop{
+            animation: 1.2s tT ;
+        }
+        .moveFromBottom{
+            animation: 1.2s fB ;
+        }
+        @keyframes tT {
+            from{ }
+            to{
+                transform: translateY(0%) scale(0.7);
+            }
+        }
+        @keyframes fB {
+            from{
+                transform: translateY(100%);
+            }
+            to{}
+        }
+        /*定义向下滑动*/
+        .moveFromTop{
+            animation: 1.2s fT ;
+        }
+        .moveToBottom{
+            animation: 1.2s ToBottom;
+        }
+        @keyframes fT {
+            from{
+                transform: translateY(-100%);
+            }
+            to{}
+        }
+        @keyframes ToBottom {
+            from{}
+            to{
+                transform: translateY(0%) scale(0.7);
+            }
+        }
+
+        /*音乐*/
+        #music{
+            position: absolute;
+            z-index: 20;
+            top: 6px;
+            right: 6px;
+            width: 30px;
+            height: 30px;
+            background: url(img/music.png) no-repeat;
+            background-size: 100% 100%;
+        }
+
+    </style>
+</head>
+<body>
+   <div id="wrap">
+       <canvas id="test"></canvas>
+       <ul id="list">
+           <li id="one">
+               <div class="text">
+                   <p class="text1">曾经作为前端开发的你<br/>解决PC兼容性而焦头烂额</p>
+                   <p class="text2">而今<br/>移动端H5应用疯狂来袭</p>
+                   <p class="text1">你是否已准备充分<br/>学习新技能</p>
+                   <p class="text2">曾破茧成蝶、重获新生？</p>
+               </div>
+           </li>
+           <li id="two">
+               <ul class="spread">
+                   <li></li>
+                   <li></li>
+                   <li></li>
+                   <li></li>
+                   <li></li>
+                   <li></li>
+               </ul>
+           </li>
+           <li id="three">
+               <div class="imgRotate"></div>
+           </li>
+           <li id="four">
+               <div>
+                   transform  transition  rotate  scale  translate  keyframes animation  webkitTransitionEnd webkitAnimationIterati<br/>on elapsedTime perspective…
+               </div>
+               <div>
+                   drawImage lineWidth  strokeStyle  lineCap  globalCompositeOperation  moveTo   lineTo  stroke  arc  getImageData…
+               </div>
+               <div>
+                   audio autoplay loop  paused  play  pause…
+               </div>
+           </li>
+           <li id="five"></li>
+       </ul>
+       <div id="arrow" class="showHide"></div>
+       <div id="music">
+           <audio src="./img/music.mp3 " loop></audio>
+       </div>
+   </div>
+</body>
+
+<script src="js/tools.js"></script>
+<script src="js/transform.js"></script>
+<script type="text/javascript">
+    document.addEventListener('touchstart',function (ev) {
+        var ev= event || window.event;
+        ev.preventDefault();
+    });
+
+    //rem适配
+    (function () {
+        var styleNode = document.createElement('style');
+        var width = document.documentElement.clientWidth/16;
+        styleNode.innerHTML = "html{font-size:"+width+"px !important;}";
+        document.head.appendChild(styleNode);
+    })();
+
+    window.onload = function () {
+
+        var test = document.getElementById('test');
+
+        var wrap = document.getElementById('wrap');
+        var list = document.getElementById('list');
+        var lisNode = document.querySelectorAll('#list>li');
+
+        var music = document.getElementById('music');
+        var audio = document.querySelector('#music audio');
+
+        /*定义变量*/
+        var elementY = 0;
+        var startY = 0;
+        var T = 0;
+        var now = 0;
+        var flag = 0;
+        var index = 0;
+
+
+//        点击屏幕出现动画
+        var clickIndex = 0;
+        for (var i = 0; i < lisNode.length; i++) {
+
+            lisNode[i].addEventListener('click',function () {
+                clickIndex = this.index;
+                animation[clickIndex].outAn();
+                setTimeout(function () {
+                    animation[clickIndex].inAn();
+                },800);
+            });
+        }
+
+        //音频
+        music.onclick = function () {
+            if(audio.paused){
+                audio.play();
+            } else{
+                audio.pause();
+            }
+        };
+
+        // 动画
+        var animation = [
+            {
+                inAn: function () {
+                    var text1 = document.querySelectorAll('#one .text .text1');
+                    var text2 = document.querySelectorAll('#one .text .text2');
+
+                    css(text1[0], "translateX", 0);
+                    css(text1[1], "translateX", 0);
+                    css(text2[0], "translateX", 0);
+                    css(text2[1], "translateX", 0);
+                },
+                outAn: function () {
+                    var text1 = document.querySelectorAll('#one .text .text1');
+                    var text2 = document.querySelectorAll('#one .text .text2');
+
+                    css(text1[0], "translateX", 400);
+                    css(text1[1], "translateX", 400);
+                    css(text2[0], "translateX", -400);
+                    css(text2[1], "translateX", -400);
+                }
+            },
+            {
+                inAn: function () {
+                    var spread = document.querySelectorAll('#two .spread>li');
+                    for (var i = 0; i < spread.length; i++) {
+                        css(spread[i], "rotate", 720);
+                    }
+                    /*top: 55%;*/
+                    spread[0].style.top = 30 + '%';
+                    spread[1].style.top = 40 + '%';
+                    spread[1].style.left = 60 + '%';
+                    spread[2].style.top = 65 + '%';
+                    spread[2].style.left = 60 + '%';
+                    spread[3].style.top = 75 + '%';
+                    spread[4].style.top = 65 + '%';
+                    spread[4].style.left = -60 + '%';
+                    spread[5].style.top = 40 + '%';
+                    spread[5].style.left = -60 + '%';
+
+                },
+                outAn: function () {
+                    var spread = document.querySelectorAll('#two .spread>li');
+                    for (var i = 0; i < spread.length; i++) {
+                        css(spread[i], "rotate", 0);
+                        spread[i].style.top = 55 + '%';
+                        spread[i].style.left = 0;
+                    }
+
+                }
+            },
+            {
+                inAn: function () {
+                    var imgRotate = document.querySelector('#three .imgRotate');
+
+                    imgRotate.style.transform = "rotateY(720deg)";
+                },
+                outAn: function () {
+                    var imgRotate = document.querySelector('#three .imgRotate');
+                    imgRotate.style.transform = "rotateY(0)";
+
+                }
+            },
+            {
+                inAn: function () {
+                    var text = document.querySelectorAll('#four>div');
+                    for (var i = 0; i < text.length; i++) {
+                        text[i].style.visibility = "visible";
+                        css(text[i], 'scale', 1);
+                    }
+
+                    text[0].style.width = 135 + "px";
+                    text[0].style.height = 145 + "px";
+                    text[1].style.width = 170 + "px";
+                    text[1].style.height = 90 + "px";
+                    text[2].style.width = 60 + "px";
+                    text[2].style.height = 160 + "px";
+                },
+                outAn: function () {
+
+                    var text = document.querySelectorAll('#four>div');
+
+                    for (var i = 0; i < text.length; i++) {
+                        text[i].style.width = 0;
+                        text[i].style.height = 0;
+                        text[i].style.visibility = "hidden";
+                        css(text[i], 'scale', 0)
+                    }
+                }
+            },
+            {
+                inAn: function () {
+
+                },
+                outAn: function () {
+
+                }
+            }
+        ];
+        for (var i = 0; i < animation.length; i++) {
+            animation[i].outAn();
+        }
+
+        //滑屏
+        slide();
+        function slide() {
+            for (var i = 0; i < lisNode.length; i++) {
+                lisNode[i].index = i;
+                lisNode[i].addEventListener("touchstart", function (ev) {
+                    var ev = ev || event;
+                    var touchC = ev.changedTouches[0];
+
+                    elementY = list.offsetTop;
+                    startY = touchC.clientY;
+
+
+                });
+
+                lisNode[i].addEventListener("touchmove", function (ev) {
+                    var ev = ev || event;
+                    var touchC = ev.changedTouches[0];
+
+                    var nowY = touchC.clientY;
+                    var dis = nowY - startY;
+                    T = elementY + dis;
+
+
+                    if (T < 0) {
+
+//                    向上滑
+                        index = this.index;
+                        flag = this.index + 1;
+                        if (flag === lisNode.length) {
+                            flag = 0;
+                        }
+                        lisNode[this.index].style.transformOrigin = "center top";
+                        lisNode[this.index].className = 'moveToTop';
+                        css(lisNode[flag], 'translateY', T);
+                        lisNode[flag].style.visibility = "visible";
+                        lisNode[flag].className = 'moveFromBottom';
+                        if (flag === 0) {
+                            lisNode[flag].style.zIndex = 9;
+                        }
+
+
+                    } else if (T > 0) {
+                        //向下滑
+                        index = this.index;
+                        now = this.index - 1;
+                        if (now === -1) {
+                            now = lisNode.length - 1;
+                        }
+                        lisNode[this.index].style.transformOrigin = "center bottom";
+                        lisNode[this.index].className = 'moveToBottom';
+                        css(lisNode[now], 'translateY', T);
+                        lisNode[now].style.visibility = "visible";
+                        lisNode[now].className = 'moveFromTop';
+                        lisNode[now].style.zIndex = 6;
+
+                    }
+
+                });
+                lisNode[i].addEventListener("touchend", function (ev) {
+                    var ev = ev || event;
+                    if (T < 0) {
+                        var translateY1 = css(lisNode[flag], 'translateY');
+                        var Y1 = translateY1 - T;
+                        lisNode[flag].style.transform = "translateY(" + Y1 + "px)";
+
+                        animation[index].outAn();
+                        setTimeout(function () {
+                            lisNode[index].className = "";
+                            lisNode[index].style.visibility = "hidden";
+                            lisNode[flag].className = "";
+                            lisNode[flag].style.zIndex = 0;
+                            animation[flag].inAn();
+
+                        }, 1200);
+
+                    } else if (T > 0) {
+                        var translateY2 = css(lisNode[now], 'translateY');
+                        var Y2 = translateY2 - T;
+                        lisNode[now].style.transform = "translateY(" + Y2 + "px)";
+
+                        animation[index].outAn();
+                        setTimeout(function () {
+                            console.log(index, now);
+                            lisNode[index].className = "";
+                            lisNode[index].style.visibility = "hidden";
+                            lisNode[now].className = "";
+                            lisNode[now].style.zIndex = 0;
+
+                            animation[now].inAn();
+                        }, 1200);
+                    }
+
+                })
+            }
+
+
+            //刮刮卡
+            canvas();
+            function canvas() {
+                test.width = document.documentElement.clientWidth;
+                test.height = document.documentElement.clientHeight;
+
+                if (test.getContext) {
+                    var ctx = test.getContext("2d");
+                    var img = new Image();
+                    img.src = "./img/a.png";
+                    img.onload = function () {
+                        draw(this);
+                    }
+                }
+                function draw(img) {
+                    ctx.drawImage(img, 0, 0, test.width, test.height);
+
+                    test.addEventListener('touchstart', function (ev) {
+                        var ev = event || window.event;
+                        var touch = ev.changedTouches[0];
+
+                        var x = touch.clientX - this.offsetLeft;
+                        var y = touch.clientY - this.offsetTop;
+
+                        ctx.globalCompositeOperation = "destination-out"; //只留下目标超过源的部分
+                        ctx.lineWidth = 30;
+                        ctx.lineCap = "round";
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + 1, y + 1);
+                        ctx.stroke();
+                    });
+                    test.addEventListener('touchmove', function (ev) {
+                        var ev = event || window.event;
+                        var touch = ev.changedTouches[0];
+
+                        var x = touch.clientX - this.offsetLeft;
+                        var y = touch.clientY - this.offsetTop;
+
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+
+                    });
+                    test.addEventListener('touchend', function (ev) {
+                        var imgData = ctx.getImageData(0, 0, test.width, test.height);
+                        var all = imgData.width * imgData.height;
+                        var flag = 0;
+
+                        for (var i = 0; i < all; i++) {
+                            if (imgData.data[i * 4 + 3] === 0) {
+                                flag++
+                            }
+                        }
+                        if (flag > all / 2) {
+                            test.style.opacity = 0
+                        }
+
+                    });
+                    test.addEventListener('transitionend', function () {
+                        this.remove();
+                        animation[0].inAn();
+                        music.onclick();
+                    })
+                }
+            }
+
+        }
+    }
+
+</script>
+
+</html>
